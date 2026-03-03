@@ -28,7 +28,3 @@ class Network:
                 for row in range(len(self.weights[layer])):
                     print(f"The weight from N{col+1}(layer={layer}) to N{row+1}(layer={layer+1}) is {self.weights[layer][row][col]}")
             layer += 1
-
-network = Network([784,16,16,10])
-
-network.print_biases()
