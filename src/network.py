@@ -11,6 +11,12 @@ class Network:
         # self.weights[layer][node from layer-1][node from layer] = weight
         self.weights = [np.random.default_rng().standard_normal(size=(y, x)) for x, y in zip(sizes[:-1], sizes[1:])]
 
+    def feed_forward(self, data):
+        a = data # input is the first layers activation
+        for w, b in zip(self.weights, self.biases):
+            a = self.sigmoid(w @ a+b)
+        return a
+
     def print_biases(self):
         layer = 0
         while layer <= self.num_layers-2:
@@ -28,3 +34,6 @@ class Network:
                 for row in range(len(self.weights[layer])):
                     print(f"The weight from N{col+1}(layer={layer}) to N{row+1}(layer={layer+1}) is {self.weights[layer][row][col]}")
             layer += 1
+
+    def sigmoid(self, z):
+        return 1.0 / (1.0 + np.exp(-z))

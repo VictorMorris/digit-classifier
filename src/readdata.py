@@ -4,8 +4,6 @@
 import numpy as np # linear algebra
 import struct
 from array import array
-from os.path  import join
-
 #
 # MNIST Data Loader Class
 #
@@ -32,11 +30,9 @@ class MnistDataloader(object):
             image_data = array("B", file.read())        
         images = []
         for i in range(size):
-            images.append([0] * rows * cols)
-        for i in range(size):
             img = np.array(image_data[i * rows * cols:(i + 1) * rows * cols])
-            img = img.reshape(28, 28)
-            images[i][:] = img            
+            img = img.reshape(784, 1)
+            images.append(img/255.0)            
         
         return images, labels
             
@@ -54,7 +50,6 @@ import matplotlib.pyplot as plt
 #
 # Set file paths based on added MNIST Datasets
 #
-input_path = '/input'
 training_images_filepath = 'input/train-images.idx3-ubyte'
 training_labels_filepath = 'input/train-labels.idx1-ubyte'
 test_images_filepath = 'input/t10k-images.idx3-ubyte'
@@ -78,6 +73,8 @@ def show_images(images, title_texts):
         index += 1
     plt.show()
 
+
+
 #
 # Load MINST dataset
 #
@@ -89,14 +86,14 @@ mnist_dataloader = MnistDataloader(training_images_filepath, training_labels_fil
 #
 images_2_show = []
 titles_2_show = []
-for i in range(0, 10):
+for i in range(0, 1):
     r = random.randint(1, 60000)
     images_2_show.append(x_train[r])
     titles_2_show.append('training image [' + str(r) + '] = ' + str(y_train[r]))    
 
-for i in range(0, 5):
+for i in range(0, 0):
     r = random.randint(1, 10000)
     images_2_show.append(x_test[r])        
     titles_2_show.append('test image [' + str(r) + '] = ' + str(y_test[r]))    
 
-show_images(images_2_show, titles_2_show)
+# show_images(images_2_show, titles_2_show)
