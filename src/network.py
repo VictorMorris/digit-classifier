@@ -1,3 +1,4 @@
+import os
 import random
 import numpy as np
 
@@ -18,6 +19,23 @@ class Network:
 
         self.test_errors = np.array([])
 
+    def save(self, filepath):
+        """Save the network's weights and biases to a .npz file."""
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        weight_keys = {f'w{i}': w for i, w in enumerate(self.weights)}
+        bias_keys = {f'b{i}': b for i, b in enumerate(self.biases)}
+        np.savez(filepath, **weight_keys, **bias_keys)
+
+    @classmethod
+    def load(cls, filepath):
+        """Load a network from a .npz file. Assumes fixed architecture [784, 16, 16, 10]."""
+        sizes = [784, 16, 16, 10]
+        net = cls(sizes)
+        data = np.load(filepath)
+        num_weight_arrays = len(sizes) - 1
+        net.weights = [data[f'w{i}'] for i in range(num_weight_arrays)]
+        net.biases = [data[f'b{i}'] for i in range(num_weight_arrays)]
+        return net
 
     def feed_forward(self, data):
         a = data
@@ -33,6 +51,13 @@ class Network:
         """Stocastic Gradient Descent"""
         if test_data: n_test = len(test_data)
         n = len(training_data) # Total samples
+        # Evaluate before any training to get the initial error rate
+        if test_data:
+            initial_error = 100*(1-(self.evaluate(test_data)/n_test))
+            self.test_errors = np.append(self.test_errors, initial_error)
+            print(f"Epoch 0 (untrained): {self.evaluate(test_data)} / {n_test}")
+            if epoch_callback:
+                epoch_callback(initial_error)
         for j in range(epochs):
             random.shuffle(training_data) # Shuffle is to break ordering bias
             # Slices training data into batches of size mini_batch_size
