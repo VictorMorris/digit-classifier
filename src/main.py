@@ -42,7 +42,7 @@ class App:
         self.flash_time = 10  # ms between image flashes during training
         self.draw_pixels = np.zeros((28, 28))  # drawing canvas pixel data
 
-        root.title("VictorNet 0.2")
+        root.title("Digit Classifier")
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
 
@@ -64,7 +64,7 @@ class App:
         self.config_frame.columnconfigure(0, weight=1)
         self.config_frame.columnconfigure(1, weight=1)
 
-        ttk.Label(self.config_frame, text="VictorNet 0.2", font=("Arial", 24, "bold")).grid(row=0, column=0, columnspan=2, pady=(0, 40))
+        ttk.Label(self.config_frame, text="Digit Classifier", font=("Arial", 24, "bold")).grid(row=0, column=0, columnspan=2, pady=(0, 40))
 
         # Mode selection: Train New or Load Existing
         self.mode_var = tk.StringVar(value="train")
